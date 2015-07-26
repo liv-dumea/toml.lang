@@ -61,8 +61,8 @@ color = "gray"
 
 points = { df= 1, y = 2, z = 3 }
 
-points = [{fd = 1, y = 2, z = """3 """ }, ,
-           { x = 2, y = 4, z = 8 } ]
+points = [{fd = 1, "y" = 2, z = """3 """ }, ,
+           { x = 2, "y" = 4, z = 8 } ]
 
 [a.b.c]          # this is best practice
 []        # same as [d.e.f]
