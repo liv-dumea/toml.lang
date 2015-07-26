@@ -1,0 +1,135 @@
+# Test file for TOML
+# Only this one tries to emulate a TOML file written by a user of the kind of parser writers probably hate
+# This part you'll really hate
+
+[the]
+test_string = "You'll hate me after this - #"          # " Annoying, isn't it?"
+
+regex2 = '''I [dw]on't need \d{2} apples'''
+
+[table]
+key =  "value"
+bare_key = "value"
+bare-key = "value"
+1234 = "bare integer"
+
+"127.0.0.1" = "value"
+"character encoding" = "value"
+"ʎǝʞ" = "value"
+
+lines = '''
+The first newline is
+trimmed in raw strings.
+   All other whitespace
+   is preserved.
+'''
+date = true
+[adfa] #fasdfafd
+
+date1 = 1979-05-27T07:32:00Z
+
+date2 = 1979-05-27T00:32:00-07:00 #fadsf
+date3 = 1979-05-27T00:32:00.999999-07:00 #fasdfaf
+
+# The following strings are byte-for-byte equivalent:
+
+str1 = "The quick brown fox jumps over the lazy dog."
+
+str2 = """
+The quick brown \
+
+
+  fox jumps over \
+    the lazy dog."""
+
+key3 = """\
+       The quick brown \
+       fox jumps over \
+       the lazy dog.\
+       """
+[[products]]
+name = "Hammer"
+sku = 738594937
+
+[[products]]
+
+[[products]]
+name = "Nail"
+sku = 284758393
+color = "gray"
+
+
+points = { df= 1, y = 2, z = 3 }
+
+points = [{fd = 1, y = 2, z = """3 """ }, ,
+           { x = 2, y = 4, z = 8 } ]
+
+[a.b.c]          # this is best practice
+[]        # same as [d.e.f]
+[ g .  h  . i ]  # same as [g.h.i]
+[ j . "ʞ" . l ]  # same as [j."ʞ".l]
+
+="no key name"   #not allowed
+
+# What you see is what you get.
+
+winpath  = 'C:\Users\nodejs\templates'
+winpath2 = '\\ServerX\admin$\system32\'
+quoted   = 'Tom "Dubs" Preston-Werner'
+regex    = '<\i\c*\s*>'
+
+[clients]
+data = [ ["gamma", "delta"], [1, 2] ]
+
+int1 = +99
+int2 = 42
+int3 = 0
+int4 = +17e+3
+
+int5 = 1_000
+int6 = 5_349_221
+int7 = 1_2_3_4_533     # valid but inadvisable
+
+# fractional
+flt1 = +1.0
+flt2 = 3.1415
+flt3 = -0.01
+
+# exponent
+flt4 = 5e+22
+flt5 = 1e6
+flt6 = -2E-2
+
+# both
+flt7 = 6.626e-34
+
+str = "I'm a string.\"You can quote me\". Name\tJos\u00E9\nLocation\tSF."
+
+    [the.hard]
+    test_array=[ "] ", " # "]      # ] There you go, parse this!
+    test_array = [ "Test #11 ]proved that", "Experiment #9 was a success" ]
+    # You didn't think it'd as easy as chucking out the last #, did you?
+    another_test_string = " Same thing, but with a string #"
+    harder_test_string = " And when \"'s are in the string, along with # \""   # "and comments are there too"
+    # Things will get harder
+
+        [the.hard."bit#"]
+        "what?" = "You don't think some user won't do that?"
+        multi_line_array = [
+            "]",
+            # ] Oh yes I did
+            ]
+
+# Each of the following keygroups/key value pairs should produce an error. Uncomment to them to test
+
+[error] if you didn't catch this, your parser is broken
+
+string = "Anything other than tabs, spaces and newline after a keygroup or key value pair has ended should produce an error unless it is a comment" like this
+
+array = [
+         "This might most likely happen in multiline arrays",
+         Like here,
+         "or here,
+         and here"
+         ]     End of array comment, forgot the #
+number = 3.14  pi <--again forgot the #         
