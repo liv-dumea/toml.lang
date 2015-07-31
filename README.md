@@ -1,5 +1,5 @@
 # toml.lang
- Syntax highlighting for the Toml languag
+ GEdit (GtkSourceView) syntax highlighting for the [Toml](https://github.com/toml-lang/toml) language
 
 Based on ini.lang and json.lang available at [language-spec](https://github.com/GNOME/gtksourceview/tree/master/data/language-specs).
 
