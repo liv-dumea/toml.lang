@@ -2,8 +2,8 @@
 
 <!--
 
- Author: Liviu Dumea <liviu.dumea.ro@gmail.com>
- Copyright (C) 2015 by Liviu Dumea <liviu.dumea.ro@gmail.com>
+ Author: Liviu Dumea <liv.dumea@gmail.com>
+ Copyright (C) 2018 by Liviu Dumea <liv.dumea@gmail.com>
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU Lesser General Public
@@ -12,11 +12,10 @@
 -->
 
 <!--
- Syntax highlighting for the Toml language
- See: https://github.com/toml-lang/toml
+ GEdit (GtkSourceView) syntax highlighting for the [Toml](https://github.com/toml-lang/toml) language
 -->
 
-<language id="toml" _name="Toml" version="2.0" _section="Others">
+<language id="toml" _name="TOML" version="2.0" _section="Others">
   <metadata>
     <property name="globs">*.toml;*.tml;*.lock</property>
     <property name="line-comment-start">#</property>
@@ -64,7 +63,11 @@
     </context>
 
     <context id="datetime-value" style-ref="datetime-value">
-      <match>(\d{4})(-)?(\d\d)(-)?(\d\d)(T)?(\d\d)(:)?(\d\d)(:)?(\d\d)(.\d+)?(Z|([+-])(\d\d)(:)?(\d\d))</match>
+<match>(\d{4})(-)?(\d\d)(-)?(\d\d)(T)?(\d\d)(:)?(\d\d)(:)?(\d\d)(.\d+)?(Z|([+-])(\d\d)(:)?(\d\d))</match>
+    </context>
+
+    <context id="datetime-not-strict-value" style-ref="datetime-value">
+      <match>((\d{4})(-)?(\d\d)(-)?(\d\d)(T|\s)?)?(\d\d)(:)?(\d\d)(:)?(\d\d)(.\d+)?(Z|([+-])(\d\d)(:)?(\d\d))?</match>
     </context>
 
     <context id="boolean-value" style-ref="boolean-value">
@@ -75,6 +78,7 @@
     <context id="integer" style-ref="decimal">
       <match>[+\-]?(?:[1-9][0-9_]*|0)(?![.eE])</match>
     </context>
+
 
     <context id="float" style-ref="floating-point">
       <match>[+\-]?(?:[1-9][0-9_]*|0)(?:\.[0-9_]+)?(?:[eE][+\-]?[0-9_]+)?</match>
@@ -97,6 +101,26 @@
     <define-regex id="unicode_escape" extended="true">
       u{\%{hex_digit}{1,6}}
     </define-regex>
+
+    <context id="hex-number" style-ref="decimal">
+        <match>0[xX][0-9a-fA-F][_0-9a-fA-F]*</match>
+    </context>
+
+    <context id="octal-number" style-ref="decimal">
+        <match>0o[0-7][_0-7]*</match>
+    </context>
+
+    <context id="binary-number" style-ref="decimal">
+        <match>0[bB][01][_01]*</match>
+    </context>
+
+    <context id="infinity-number" style-ref="floating-point">
+        <match>[+-]?inf</match>
+    </context>
+
+    <context id="not-a-number" style-ref="floating-point">
+        <match>[+-]?nan</match>
+    </context>
 
     <context id="string_escape" style-ref="def:special-char">
       <match>\\\%{common_escape}|\\\%{unicode_escape}</match>
@@ -185,16 +209,49 @@
       <match>^\s*=([^#]*(?=#)|.*$)</match>
     </context>
 
+    <context id="empty-key-error" style-ref="error">
+      <match>^[^=]*=\s*#.*$</match>
+    </context>
+
+    <context id="text-after-table-error" style-ref="error">
+      <match>^\s*\[[^\]\[]*\]s*[^#]+$</match> 
+    </context>
+
+    <context id="text-after-array-error" style-ref="error">
+      <match>^\s*\[\[[^\]]*\]\]s*[^#]+$</match> 
+    </context>
+
+    <!-- 
+	[]     # INVALID
+	[a.]   # INVALID
+	[a..b] # INVALID
+	[.b]   # INVALID
+	[.]    # INVALID
+	 -->
+    <context id="invalid-table-error" style-ref="error">
+	    <match>^\s*\[(\.?|[^.]+\.{2,}[^.]+|\.+[^.]+|[^.]+\.+|\.+[^.]+\.+)\]\s*(#.*)?$</match> 
+    </context>
+
+    <context id="invalid-array-error" style-ref="error">
+      <match>^\s*\[\[(\.*|[^.]+\.{2,}[^.]+|\.+[^.]+|[^.]+\.+|\.+[^.]+\.+)\]\]s*(#.*)?$</match> 
+    </context>
+
     <context id="value">
       <include>
         <context ref="array"/>
         <context ref="inline-table"/>
         <context ref="boolean-value"/>
         <context ref="datetime-value"/>
+        <context ref="datetime-not-strict-value"/>
         <context ref="multiline-basic-string"/>
         <context ref="basic-string"/>
         <context ref="multiline-literal-string"/>
         <context ref="literal-string"/>
+        <context ref="hex-number"/>
+        <context ref="octal-number"/>
+        <context ref="binary-number"/>
+        <context ref="infinity-number"/>
+        <context ref="not-a-number"/>
         <context ref="integer"/>
         <context ref="float"/>
         <context ref="line-comment"/>
@@ -206,6 +263,11 @@
       <include>
         <context ref="line-comment"/>
         <context ref="assign-error-line" />
+	<context ref="empty-key-error" />
+	<context ref="invalid-table-error" />
+	<context ref="invalid-array-error" />
+	<context ref="text-after-table-error" />
+	<context ref="text-after-array-error" />
         <context ref="key"/>
         <context ref="pair-value"/>
         <context ref="table-entry"/>
@@ -214,3 +276,4 @@
     </context>
   </definitions>
 </language>
+

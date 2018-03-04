@@ -65,10 +65,12 @@ points = [{fd = 1, "y" = 2, z = """3 """ }, ,
            { x = 2, "y" = 4, z = 8 } ]
 
 [a.b.c]          # this is best practice
-[]        # same as [d.e.f]
+[d. e. f]        # same as [d.e.f]
 [ g .  h  . i ]  # same as [g.h.i]
 [ j . "ʞ" . l ]  # same as [j."ʞ".l]
-
+points = [ { x = 1, y = 2, z = 3 },
+           { x = 7, y = 8, z = 9 },
+           { x = 2, y = 4, z = 8 } ]
 ="no key name"   #not allowed
 
 # What you see is what you get.
@@ -119,10 +121,51 @@ str = "I'm a string.\"You can quote me\". Name\tJos\u00E9\nLocation\tSF."
             "]",
             # ] Oh yes I did
             ]
+name = "Orange"
+physical.color = "orange"
+physical.shape = "round"
+site."google.com" = true
+
+# hexadecimal with prefix `0x`
+hex1 = 0xDEADBEEF
+hex2 = 0xdeadbeef
+hex3 = 0xdead_beef
+
+# octal with prefix `0o`
+oct1 = 0o01234567
+oct2 = 0o755 # useful for Unix file permissions
+
+# binary with prefix `0b`
+bin1 = 0b11010110
+# infinity
+sf1 = inf  # positive infinity
+sf2 = +inf # positive infinity
+sf3 = -inf # negative infinity
+
+# not a number
+sf4 = nan  # actual sNaN/qNaN encoding is implementation specific
+sf5 = +nan # same as `nan`
+sf6 = -nan # valid, actual encoding is implementation specific
+
+odt4 = 1979-05-27 07:32:00Z
+ldt1 = 1979-05-27T07:32:00
+ldt2 = 1979-05-27T00:32:00.999999
+ld1 = 1979-05-27
+lt1 = 07:32:00
+lt2 = 00:32:00.999999
+
+[...fasd...]     # INVALID
+[a.]   # INVALID
+[a..b] # INVALID
+[.b]   # INVALID
+[.]    # INVALID
+
+
 
 # Each of the following keygroups/key value pairs should produce an error. Uncomment to them to test
 
 [error] if you didn't catch this, your parser is broken
+key = # INVALID
 
 string = "Anything other than tabs, spaces and newline after a keygroup or key value pair has ended should produce an error unless it is a comment" like this
 
